@@ -1,0 +1,29 @@
+{
+  "name": "profile-card",
+  "description": "Brightspace Profile Card",
+  "private": true,
+  "scripts": {},
+  "homepage": "https://github.com/Brightspace/profile-card",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Brightspace/profile-card.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Brightspace/profile-card/issues"
+  },
+  "keywords": [
+    "d2l",
+    "profile",
+    "card"
+  ],
+  "author": "D2L Corporation",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "eslint": "^2.4.0",
+    "eslint-config-brightspace": "^0.2.1",
+    "eslint-plugin-html": "^1.4.0",
+    "polylint": "^2.10.1",
+    "rimraf": "^2.5.2"
+  }
+}

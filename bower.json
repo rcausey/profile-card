@@ -1,0 +1,21 @@
+{
+  "name": "d2l-profile-card",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Brightspace/profile-card",
+  "authors": [
+    "Brightspace"
+  ],
+  "description": "D2L Profile Card",
+  "moduleType": [
+    "polymer"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {}
+}
