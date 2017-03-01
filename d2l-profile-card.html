@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="d2l-profile-card">
+    <template>
+        <style>
+            :host {
+                width: 350px;
+                height: 350px;
+                border: 1px lightgray solid;
+                border-radius: 7px;
+                margin: 20px;
+                text-align: center;
+                cursor: pointer;
+                display: block;
+                position: relative;
+            }
+
+            .profile-card-background-container {
+                width: 100%;
+                height: 80px;
+                z-index: -1;
+                position: absolute;
+                left: 0;
+                top: 0;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+            }
+
+            .profile-card-background {
+                min-width: 100%;
+                min-height: 100%;
+            }
+
+            .profile-card-avatar {
+                width: 80px;
+                height: 80px;
+                border: 1px white solid;
+                border-radius: 10px;
+                display: table;
+                margin: 0 auto;
+                margin-top: 40px;
+            }
+
+            .profile-card-grade {
+                font-weight: bold;
+            }
+
+            .profile-card-items {
+                padding-left: 20px;
+                padding-right: 20px;
+                text-align: left;
+            }
+		</style>
+
+    	<div class="profile-card-background-container">
+    	    <img src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
+    	</div>
+        <img src$="[[icon]]" alt="" role="presentation" class="profile-card-avatar" />
+        <h3 class="profile-card-name">[[name]]</h3>
+        <p class="profile-card-school"><span class="profile-card-grade">[[grade]]</span> <span>-</span> <span>[[school]]</span></p>
+    	<div class="profile-card-items">
+    		<slot></slot>
+    	</div>
+    </template>
+	<script>
+		'use strict';
+
+		Polymer({
+			is: 'd2l-profile-card',
+			properties: {
+				icon: String,
+				name: String,
+				grade: String,
+				school: String,
+				background: String
+			}
+		});
+	</script>
+</dom-module>
