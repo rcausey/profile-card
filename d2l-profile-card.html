@@ -44,10 +44,6 @@
                 margin-top: 40px;
             }
 
-            .profile-card-grade {
-                font-weight: bold;
-            }
-
             .profile-card-items {
                 padding-left: 20px;
                 padding-right: 20px;
@@ -60,7 +56,7 @@
     	</div>
         <img src$="[[icon]]" alt="" role="presentation" class="profile-card-avatar" />
         <h3 class="profile-card-name">[[name]]</h3>
-        <p class="profile-card-school"><span class="profile-card-grade">[[grade]]</span> <span>-</span> <span>[[school]]</span></p>
+        <p class="profile-card-school">[[school]]</p>
     	<div class="profile-card-items">
     		<slot></slot>
     	</div>
@@ -73,7 +69,6 @@
 			properties: {
 				icon: String,
 				name: String,
-				grade: String,
 				school: String,
 				background: String
 			}
