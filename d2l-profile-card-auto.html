@@ -1,0 +1,119 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-ajax/d2l-ajax.html">
+<link rel="import" href="../d2l-siren-parser/d2l-siren-parser.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="d2l-profile-card.html">
+
+<dom-module id="d2l-profile-card-auto">
+    <template>
+        <iron-ajax
+            id="userRequest"
+            url="[[userUrl]]"
+            headers="[[_headers]]"
+			on-iron-ajax-response="_onUserResponse"
+        ></iron-ajax>
+
+        <iron-ajax
+            id="entitiesRequest"
+            url="[[_entitiesUrl]]"
+            headers="[[_headers]]"
+			on-iron-ajax-response="_onEntitiesResponse"
+        ></iron-ajax>
+
+        <iron-ajax
+            id="organizationRequest"
+            url="[[_organizationUrl]]"
+            headers="[[_headers]]"
+			on-iron-ajax-response="_onOrganizationResponse"
+        ></iron-ajax>
+
+        <d2l-profile-card
+            name=[[_name]]
+            school=[[_school]]
+            icon=[[_iconUrl]]
+            background=[[_backgroundUrl]]
+        >
+            <slot></slot>
+        </d2l-profile-card>
+    </template>
+    <script>
+        'use strict';
+		Polymer({
+			is: 'd2l-profile-card-auto',
+            properties: {
+                userUrl: String,
+                token: String,
+                _name: String,
+                _iconUrl: String,
+                _school: String,
+                _entitiesUrl: String,
+                _organizationUrl: String,
+                _sirenParser: String,
+                _authorization: String,
+                _headers: String,
+                _previousUserCall: Object
+            },
+            observers: [
+                '_onUserChange( userUrl, token )'
+            ],
+            ready: function() {
+                this._generateUserRequest();
+            },
+            _onUserChange: function(userUrl, token) {
+                this._generateUserRequest();
+            },
+            _generateUserRequest: function() {
+                this._previousUserCall = this._previousUserCall || {};
+                if (
+                    this.userUrl &&
+                    this.token &&
+                    this.userUrl !== this._previousUserCall.userUrl &&
+                    this.token !== this._previousUserCall.token
+                ) {
+                    this._previousUserCall = { userUrl: this.userUrl, token: this.token };
+                    this._authorization = 'Bearer ' + this.token;
+                    this._headers = {
+                        Authorization: this._authorization,
+                        Accept: 'application/vnd.siren+json'
+                    };
+                    this.$.userRequest.generateRequest();
+                }
+            },
+            _onUserResponse: function(response) {
+                if (response.detail.status === 200) {
+                    this._parser = this._parser || document.createElement('d2l-siren-parser');
+                    var userResponse = this._parser.parse(response.detail.xhr.response);
+                    this._name = (userResponse.getSubEntityByRel('https://api.brightspace.com/rels/display-name') || { properties: {}}).properties.name;
+                    var profile = userResponse.getSubEntityByRel('https://api.brightspace.com/rels/user-profile');
+                    if (profile) {
+                        var image = profile.getSubEntitiesByRel('https://api.brightspace.com/rels/profile-image')[0];
+                        this._iconUrl = (image.getLinkByRel('https://api.brightspace.com/rels/thumbnail#regular') || {}).href;
+                    }
+
+                this._entitiesUrl = (userResponse.getLinkByRel('https://api.brightspace.com/rels/my-enrollments') || {}).href;
+                    if ( this._entitiesUrl ) {
+                        this.$.entitiesRequest.generateRequest();
+                    }
+                }
+            },
+            _onEntitiesResponse: function(response) {
+                if (response.detail.status === 200) {
+                    var entitiesResponse = this._parser.parse(response.detail.xhr.response);
+                    this._organizationUrl = (entitiesResponse.getLinkByRel('https://api.brightspace.com/rels/organization') || {}).href;
+
+                    if ( this._organizationUrl ) {
+                        this.$.organizationRequest.generateRequest();
+                    }
+                }
+            },
+            _onOrganizationResponse: function(response) {
+                if (response.detail.status === 200) {
+                    var organizationResponse = this._parser.parse(response.detail.xhr.response);
+                    if (organizationResponse.properties) {
+                        this._school = organizationResponse.properties.name;
+                    }
+                }
+            }
+        });
+    </script>
+</dom-module>
