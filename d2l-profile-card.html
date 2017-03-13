@@ -33,6 +33,7 @@
 				min-width: 100%;
 				min-height: 100%;
 				background-color: lightgrey;
+				width: 350px;
 			}
 
 			.profile-card-avatar {
@@ -51,13 +52,22 @@
 				padding-right: 20px;
 				text-align: left;
 			}
+
+			[hidden] {
+				display: none;
+			}
+
+			.profile-card-grade {
+				font-weight: bold;
+			}
 		</style>
 		<div class="profile-card-background-container">
 			<img src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
 		</div>
 		<img src$="[[icon]]" alt="" role="presentation" class="profile-card-avatar" />
 		<h3 class="profile-card-name">[[name]]</h3>
-		<p class="profile-card-school">[[school]]</p>
+		<p hidden="[[grade]]" class="profile-card-school">[[school]]</p>
+		<p hidden="[[!grade]]" class="profile-card-school"><span class="profile-card-grade">[[grade]]</span> <span>-</span> <span>[[school]]</span></p>
 		<div class="profile-card-items">
 			<slot></slot>
 		</div>
@@ -71,7 +81,8 @@
 			icon: String,
 			name: String,
 			school: String,
-			background: String
+			background: String,
+			grade: String
 		}
 	});
 	</script>
