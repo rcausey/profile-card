@@ -1,8 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../d2l-ajax/d2l-ajax.html">
-<link rel="import" href="../d2l-siren-parser/d2l-siren-parser.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../d2l-ajax/d2l-ajax.html">
 <link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
+<link rel="import" href="../d2l-siren-parser/d2l-siren-parser.html">
 <link rel="import" href="d2l-profile-card.html">
 
 <dom-module id="d2l-profile-card-auto">
@@ -29,10 +29,10 @@
 		></iron-ajax>
 
 		<iron-ajax
-			id="organizationRequest"
-			url="[[_organizationUrl]]"
+			id="institutionRequest"
+			url="[[_institutionUrl]]"
 			headers="[[_headers]]"
-			on-iron-ajax-response="_onOrganizationResponse"
+			on-iron-ajax-response="_onInstitutionResponse"
 		></iron-ajax>
 
 		<iron-ajax
@@ -58,18 +58,18 @@
 		properties: {
 			userUrl: String,
 			token: String,
-			_name: String,
-			_iconUrl: String,
-			_school: String,
+			_authorization: String,
 			_backgroundUrl: String,
 			_enrollmentsUrl: String,
-			_organizationUrl: String,
-			_sirenParser: String,
-			_authorization: String,
 			_headers: String,
-			_previousUserCall: Object,
+			_iconUrl: String,
+			_institutionUrl: String,
+			_name: String,
 			_organizationsUrl: String,
-			_organizationImageUrl: String
+			_organizationImageUrl: String,
+			_previousUserCall: Object,
+			_school: String,
+			_sirenParser: String
 		},
 		observers: [
 			'_onUserChange( userUrl, token )'
@@ -119,11 +119,10 @@
 		_onEnrollmentsResponse: function(response) {
 			if (response.detail.status === 200) {
 				var enrollmentsResponse = this._parser.parse(response.detail.xhr.response);
-				this.enrollments = enrollmentsResponse.entities;
-				this._organizationUrl = ( enrollmentsResponse.getLinkByRel('https://api.brightspace.com/rels/organization') || {}).href;
+				this._institutionUrl = ( enrollmentsResponse.getLinkByRel('https://api.brightspace.com/rels/organization') || {}).href;
 
-				if ( this._organizationUrl ) {
-					this.$.organizationRequest.generateRequest();
+				if ( this._institutionUrl ) {
+					this.$.institutionRequest.generateRequest();
 				}
 
                 if (enrollmentsResponse.entities.length > 0) { // Or '=== 1'
@@ -134,11 +133,11 @@
                 }
 			}
 		},
-		_onOrganizationResponse: function(response) {
+		_onInstitutionResponse: function(response) {
 			if (response.detail.status === 200) {
-				var organizationResponse = this._parser.parse(response.detail.xhr.response);
-				if (organizationResponse.properties) {
-					this._school = organizationResponse.properties.name;
+				var institutionResponse = this._parser.parse(response.detail.xhr.response);
+				if (institutionResponse.properties) {
+					this._school = institutionResponse.properties.name;
 				}
 			}
 		},
