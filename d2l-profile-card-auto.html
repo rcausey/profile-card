@@ -156,8 +156,8 @@
 		_onOrganizationImageResponse: function (response) {
 			if (response.detail.status === 200) {
 				var organizationImageResponse = this._parser.parse(response.detail.xhr.response);
-				iconImages = this._getImageLinks(organizationImageResponse, 'wide');
-				this._backgroundUrl = iconImages.highMin || iconImages.lowMax;
+				var backgroundImages = this._getImageLinks(organizationImageResponse, 'wide');
+				this._backgroundUrl = backgroundImages.highMin || backgroundImages.lowMax;
 			}
 		}
 	});
