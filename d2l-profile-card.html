@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../d2l-icons/tier2-icons.html">
 
 <dom-module id="d2l-profile-card">
 	<template>
@@ -51,11 +53,19 @@
 				padding-right: 20px;
 				text-align: left;
 			}
+
+			.profile-card-default-icon {
+				width: 100%;
+				height: 100%;
+			}
 		</style>
 		<div class="profile-card-background-container">
 			<img src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
 		</div>
-		<img src$="[[icon]]" alt="" role="presentation" class="profile-card-avatar" />
+		<div class="profile-card-avatar">
+			<img src$="[[icon]]" hidden="[[!icon]]" alt="" role="presentation" />
+			<d2l-icon icon="d2l-tier2:profile-pic" hidden="[[icon]]" class="profile-card-default-icon"></d2l-icon>
+		</div>
 		<h3 class="profile-card-name">[[name]]</h3>
 		<p class="profile-card-school">[[school]]</p>
 		<div class="profile-card-items">
