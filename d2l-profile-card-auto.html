@@ -2,6 +2,7 @@
 <link rel="import" href="../d2l-ajax/d2l-ajax.html">
 <link rel="import" href="../d2l-siren-parser/d2l-siren-parser.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
 <link rel="import" href="d2l-profile-card.html">
 
 <dom-module id="d2l-profile-card-auto">
@@ -14,10 +15,17 @@
 		></iron-ajax>
 
 		<iron-ajax
-			id="entitiesRequest"
-			url="[[_entitiesUrl]]"
+			id="enrollmentsRequest"
+			url="[[_enrollmentsUrl]]"
 			headers="[[_headers]]"
-			on-iron-ajax-response="_onEntitiesResponse"
+			on-iron-ajax-response="_onEnrollmentsResponse"
+		></iron-ajax>
+
+		<iron-ajax
+			id="organizationsRequest"
+			url="[[_organizationsUrl]]"
+			headers="[[_headers]]"
+			on-iron-ajax-response="_onOrganizationsResponse"
 		></iron-ajax>
 
 		<iron-ajax
@@ -25,6 +33,13 @@
 			url="[[_organizationUrl]]"
 			headers="[[_headers]]"
 			on-iron-ajax-response="_onOrganizationResponse"
+		></iron-ajax>
+
+		<iron-ajax
+			id="organizationImageRequest"
+			url="[[_organizationImageUrl]]"
+			headers="[[_headers]]"
+			on-iron-ajax-response="_onOrganizationImageResponse"
 		></iron-ajax>
 
 		<d2l-profile-card
@@ -46,16 +61,20 @@
 			_name: String,
 			_iconUrl: String,
 			_school: String,
-			_entitiesUrl: String,
+			_backgroundUrl: String,
+			_enrollmentsUrl: String,
 			_organizationUrl: String,
 			_sirenParser: String,
 			_authorization: String,
 			_headers: String,
-			_previousUserCall: Object
+			_previousUserCall: Object,
+			_organizationsUrl: String,
+			_organizationImageUrl: String
 		},
 		observers: [
 			'_onUserChange( userUrl, token )'
 		],
+		behaviors: [ window.D2L.Hypermedia.OrganizationHMBehavior ],
 		ready: function() {
 			this._generateUserRequest();
 		},
@@ -90,20 +109,29 @@
 					this._iconUrl = (image.getLinkByRel('https://api.brightspace.com/rels/thumbnail#regular') || {}).href;
 				}
 
-				this._entitiesUrl = (userResponse.getLinkByRel('https://api.brightspace.com/rels/my-enrollments') || {}).href;
-				if ( this._entitiesUrl ) {
-					this.$.entitiesRequest.generateRequest();
+				this._enrollmentsUrl = (userResponse.getLinkByRel('https://api.brightspace.com/rels/my-enrollments') || {}).href;
+				if ( this._enrollmentsUrl ) {
+                    this._enrollmentsUrl += '?pageSize=2&orgUnitTypeId=3&embedDepth=1'; // also maybe embedDepth=1
+					this.$.enrollmentsRequest.generateRequest();
 				}
 			}
 		},
-		_onEntitiesResponse: function(response) {
+		_onEnrollmentsResponse: function(response) {
 			if (response.detail.status === 200) {
-				var entitiesResponse = this._parser.parse(response.detail.xhr.response);
-				this._organizationUrl = (entitiesResponse.getLinkByRel('https://api.brightspace.com/rels/organization') || {}).href;
+				var enrollmentsResponse = this._parser.parse(response.detail.xhr.response);
+				this.enrollments = enrollmentsResponse.entities;
+				this._organizationUrl = ( enrollmentsResponse.getLinkByRel('https://api.brightspace.com/rels/organization') || {}).href;
 
 				if ( this._organizationUrl ) {
 					this.$.organizationRequest.generateRequest();
 				}
+
+                if (enrollmentsResponse.entities.length > 0) { // Or '=== 1'
+                    this._organizationsUrl = enrollmentsResponse.entities[0]
+                        .getLinkByRel('https://api.brightspace.com/rels/organization').href;
+
+                    this.$.organizationsRequest.generateRequest();
+                }
 			}
 		},
 		_onOrganizationResponse: function(response) {
@@ -112,6 +140,24 @@
 				if (organizationResponse.properties) {
 					this._school = organizationResponse.properties.name;
 				}
+			}
+		},
+		_onOrganizationsResponse: function (response) {
+			if (response.detail.status === 200) {
+				var organizationsResponse = this._parser.parse(response.detail.xhr.response);
+				var imageLink = organizationsResponse.getSubEntityByClass('course-image');
+
+				if ( imageLink ) {
+					this._organizationImageUrl = imageLink.href;
+					this.$.organizationImageRequest.generateRequest();
+				}
+			}
+		},
+		_onOrganizationImageResponse: function (response) {
+			if (response.detail.status === 200) {
+				var organizationImageResponse = this._parser.parse(response.detail.xhr.response);
+				iconImages = this._getImageLinks(organizationImageResponse, 'wide');
+				this._backgroundUrl = iconImages.highMin || iconImages.lowMax;
 			}
 		}
 	});
