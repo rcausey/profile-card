@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-icons/d2l-icons.html">
+<link rel="import" href="icons.html">
 
 <dom-module id="d2l-profile-card">
 	<template>
@@ -57,6 +59,10 @@
 				display: none;
 			}
 
+			.profile-card-default-icon {
+				--d2l-icon-height: 100%;
+				--d2l-icon-width: 100%;
+			}
 			.profile-card-grade {
 				font-weight: bold;
 			}
@@ -64,7 +70,10 @@
 		<div class="profile-card-background-container">
 			<img src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
 		</div>
-		<img src$="[[icon]]" alt="" role="presentation" class="profile-card-avatar" />
+		<div class="profile-card-avatar">
+			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" />
+			<d2l-icon icon="navigation-48:profile" hidden$="{{!_hideCustomIcon(icon)}}" class="profile-card-default-icon"></d2l-icon>
+		</div>
 		<h3 class="profile-card-name">[[name]]</h3>
 		<p hidden="[[grade]]" class="profile-card-school">[[school]]</p>
 		<p hidden="[[!grade]]" class="profile-card-school"><span class="profile-card-grade">[[grade]]</span> <span>-</span> <span>[[school]]</span></p>
@@ -82,7 +91,10 @@
 			name: String,
 			school: String,
 			background: String,
-			grade: { type: String, value: null }
+			grade: { type: String, value: null },
+		},
+		_hideCustomIcon: function(icon) {
+			return !icon;
 		}
 	});
 	</script>
