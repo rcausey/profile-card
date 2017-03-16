@@ -2,7 +2,10 @@
   "name": "profile-card",
   "description": "Brightspace Profile Card",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "test": "npm run test:lint:js",
+    "test:lint:js": "eslint --ext .js,.html ."
+  },
   "homepage": "https://github.com/Brightspace/profile-card",
   "repository": {
     "type": "git",
