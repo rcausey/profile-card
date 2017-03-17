@@ -68,7 +68,7 @@
 			}
 		</style>
 		<div class="profile-card-background-container">
-			<img src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
+			<img id="backgroundImage" src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
 		</div>
 		<div class="profile-card-avatar">
 			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" />
@@ -95,6 +95,9 @@
 		},
 		_hideCustomIcon: function(icon) {
 			return !icon;
+		},
+		setBackgroundColor: function(color){
+			this.$.backgroundImage.style.backgroundColor = color;
 		}
 	});
 	</script>
