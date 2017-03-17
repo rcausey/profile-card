@@ -92,7 +92,6 @@
 					var image = profile.getSubEntityByRel(this.HypermediaRels.profileImage);
 					if (image.class.indexOf('default-image') > -1) {
 						this._iconUrl = null;
-
 					} else {
 						this._iconUrl = (image.getLinkByRel(this.HypermediaRels.thumbnailRegular) || {}).href;
 					}
