@@ -164,7 +164,9 @@
 			if (response.detail.status === 200) {
 				var theme = this._parser.parse(response.detail.xhr.response);
 
-				this.$.profileCard.setBackgroundColor(theme.properties.BackgroundColor);
+				if (theme.properties && theme.properties.BackgroundColor) {
+					this.$.profileCard.setBackgroundColor(theme.properties.BackgroundColor);
+				}
 			}
 		}
 	});
