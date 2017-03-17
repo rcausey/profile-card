@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
-<link rel="import" href="../d2l-ajax/d2l-ajax-framed.html">
 <link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
 <link rel="import" href="../d2l-hm-constants-behavior/d2l-hm-constants-behavior.html">
 <link rel="import" href="../d2l-siren-parser/d2l-siren-parser.html">
@@ -14,12 +13,7 @@
 		<iron-ajax id="organizationsRequest" url="[[_organizationsUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onOrganizationsResponse"></iron-ajax>
 		<iron-ajax id="rootRequest" url="[[_rootUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onRootResponse"></iron-ajax>
 		<iron-ajax id="userRequest" url="[[userUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onUserResponse"></iron-ajax>
-
-		<d2l-ajax-framed
-			id="themeRequest"
-			method="GET"
-			on-iron-ajax-response="_onThemeResponse">
-		</d2l-ajax-framed>
+		<iron-ajax id="themeRequest" url="[[_themeUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onThemeResponse"></iron-ajax>
 
 		<d2l-profile-card
 			name=[[_name]]
@@ -50,7 +44,8 @@
 			_organizationsUrl: String,
 			_previousUserCall: Object,
 			_school: String,
-			_sirenParser: String
+			_sirenParser: String,
+			_themeUrl: String
 		},
 		observers: [
 			'_onUserChange( userUrl, token )'
@@ -133,13 +128,12 @@
 		_onInstitutionResponse: function(response) {
 			if (response.detail.status === 200) {
 				var institutionResponse = this._parser.parse(response.detail.xhr.response);
-				var themeUrl = (institutionResponse.getLinkByRel("https://themes.api.brightspace.com/rels/theme") || {}).href;
+				this._themeUrl = (institutionResponse.getLinkByRel("https://themes.api.brightspace.com/rels/theme") || {}).href;
 				if (institutionResponse.properties) {
 					this._school = institutionResponse.properties.name;
 				}
 
-				if (themeUrl) {
-					this.$.themeRequest.url = themeUrl;
+				if (this._themeUrl) {
 					this.$.themeRequest.generateRequest();
 				}
 			}
