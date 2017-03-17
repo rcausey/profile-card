@@ -21,7 +21,7 @@
 			on-iron-ajax-response="_onThemeResponse">
 		</d2l-ajax-framed>
 
-		<d2l-profile-card id="profileCard"
+		<d2l-profile-card
 			name=[[_name]]
 			school=[[_school]]
 			icon=[[_iconUrl]]
@@ -133,13 +133,15 @@
 		_onInstitutionResponse: function(response) {
 			if (response.detail.status === 200) {
 				var institutionResponse = this._parser.parse(response.detail.xhr.response);
-				var themeUrl = institutionResponse.getLinkByRel("https://themes.api.brightspace.com/rels/theme").href;
+				var themeUrl = (institutionResponse.getLinkByRel("https://themes.api.brightspace.com/rels/theme") || {}).href;
 				if (institutionResponse.properties) {
 					this._school = institutionResponse.properties.name;
 				}
 
-				this.$.themeRequest.url = themeUrl;
-				this.$.themeRequest.generateRequest();
+				if (themeUrl) {
+					this.$.themeRequest.url = themeUrl;
+					this.$.themeRequest.generateRequest();
+				}
 			}
 		},
 		_onOrganizationsResponse: function(response) {
