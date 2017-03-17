@@ -34,7 +34,6 @@
 			.profile-card-background {
 				min-width: 100%;
 				min-height: 100%;
-				background-color: lightgrey;
 				width: 350px;
 			}
 
@@ -63,15 +62,19 @@
 				--d2l-icon-height: 100%;
 				--d2l-icon-width: 100%;
 			}
+			.profile-card-avatar-image {
+				width: 100%;
+				height:100%;
+			}
 			.profile-card-grade {
 				font-weight: bold;
 			}
 		</style>
 		<div class="profile-card-background-container">
-			<img id="backgroundImage" src$="[[background]]" alt="" role="presentation" class="profile-card-background" />
+			<img src$="[[background]]" alt="" role="presentation" style$="[[_createBackgroundStyle(backgroundColor)]]" class="profile-card-background"/>
 		</div>
 		<div class="profile-card-avatar">
-			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" />
+			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" class="profile-card-avatar-image"/>
 			<d2l-icon icon="navigation-48:profile" hidden$="{{!_hideCustomIcon(icon)}}" class="profile-card-default-icon"></d2l-icon>
 		</div>
 		<h3 class="profile-card-name">[[name]]</h3>
@@ -87,17 +90,18 @@
 	Polymer({
 		is: 'd2l-profile-card',
 		properties: {
+			background: String,
+			backgroundColor: String,
+			grade: { type: String, value: null },
 			icon: String,
 			name: String,
-			school: String,
-			background: String,
-			grade: { type: String, value: null },
+			school: String
 		},
 		_hideCustomIcon: function(icon) {
 			return !icon;
 		},
-		setBackgroundColor: function(color){
-			this.$.backgroundImage.style.backgroundColor = color;
+		_createBackgroundStyle: function(backgroundColor) {
+			return "background-color: " + (backgroundColor ? backgroundColor : "lightGrey") + ";";
 		}
 	});
 	</script>

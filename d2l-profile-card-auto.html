@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
-<link rel="import" href="../d2l-ajax/d2l-ajax.html">
 <link rel="import" href="../d2l-ajax/d2l-ajax-framed.html">
 <link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
 <link rel="import" href="../d2l-hm-constants-behavior/d2l-hm-constants-behavior.html">
@@ -27,6 +26,7 @@
 			school=[[_school]]
 			icon=[[_iconUrl]]
 			background=[[_backgroundUrl]]
+			background-color=[[_backgroundColor]]
 		>
 			<slot></slot>
 		</d2l-profile-card>
@@ -39,6 +39,7 @@
 			token: String,
 			userUrl: String,
 			_authorization: String,
+			_backgroundColor: String,
 			_backgroundUrl: String,
 			_enrollmentsUrl: String,
 			_headers: String,
@@ -164,8 +165,8 @@
 			if (response.detail.status === 200) {
 				var theme = this._parser.parse(response.detail.xhr.response);
 
-				if (theme.properties && theme.properties.BackgroundColor) {
-					this.$.profileCard.setBackgroundColor(theme.properties.BackgroundColor);
+				if (theme.properties) {
+					this._backgroundColor = theme.properties.BackgroundColor;
 				}
 			}
 		}
