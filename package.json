@@ -1,23 +1,23 @@
 {
-  "name": "profile-card",
-  "description": "Brightspace Profile Card",
+  "name": "user-tile",
+  "description": "Brightspace User Tile",
   "private": true,
   "scripts": {
     "test": "npm run test:lint:js",
     "test:lint:js": "eslint --ext .js,.html ."
   },
-  "homepage": "https://github.com/Brightspace/profile-card",
+  "homepage": "https://github.com/Brightspace/user-tile",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Brightspace/profile-card.git"
+    "url": "https://github.com/Brightspace/user-tile.git"
   },
   "bugs": {
-    "url": "https://github.com/Brightspace/profile-card/issues"
+    "url": "https://github.com/Brightspace/user-tile/issues"
   },
   "keywords": [
     "d2l",
-    "profile",
-    "card"
+    "user",
+    "tile"
   ],
   "author": "D2L Corporation",
   "license": "Apache-2.0",
