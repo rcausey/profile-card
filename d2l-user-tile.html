@@ -87,7 +87,10 @@
 	Polymer({
 		is: 'd2l-user-tile',
 		properties: {
-			icon: String,
+			icon: {
+				type: String,
+				value: null
+			},
 			name: String,
 			school: String,
 			background: String,
