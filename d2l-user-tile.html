@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../d2l-icons/d2l-icons.html">
+<link rel="import" href="../d2l-tile/d2l-tile.html">
 <link rel="import" href="icons.html">
 
 <dom-module id="d2l-user-tile">
@@ -8,34 +9,10 @@
 			:host {
 				width: 350px;
 				height: 350px;
-				border: 1px lightgray solid;
-				border-radius: 7px;
-				margin: 20px;
 				text-align: center;
 				cursor: pointer;
 				display: block;
 				position: relative;
-			}
-
-			.user-tile-background-container {
-				width: 100%;
-				height: 80px;
-				z-index: -1;
-				position: absolute;
-				left: 0;
-				top: 0;
-				border-top-left-radius: 5px;
-				border-top-right-radius: 5px;
-				overflow: hidden;
-				display: flex;
-				align-items: center;
-			}
-
-			.user-tile-background {
-				min-width: 100%;
-				min-height: 100%;
-				background-color: lightgrey;
-				width: 350px;
 			}
 
 			.user-tile-avatar {
@@ -44,8 +21,7 @@
 				border: 1px white solid;
 				border-radius: 10px;
 				display: table;
-				margin: 0 auto;
-				margin-top: 40px;
+				margin: -40px auto 0 auto;
 				background-color: white;
 				overflow: hidden;
 			}
@@ -73,20 +49,27 @@
 				width: 100%;
 				height: 100%;
 			}
+
+			d2l-tile {
+				--tile-image-height: 100px;
+				min-height: 100%;
+				width: 100%;
+				margin: 0;
+			}
 		</style>
-		<div class="user-tile-background-container">
-			<img src$="[[background]]" alt="" role="presentation" style$="[[_createBackgroundStyle(backgroundColor)]]" class="user-tile-background"/>
-		</div>
-		<div class="user-tile-avatar">
-			<d2l-icon icon="navigation-48:profile" hidden$="{{!_hideCustomIcon(icon)}}" class="user-tile-default-icon"></d2l-icon>
-			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" class="user-tile-avatar-image"/>
-		</div>
-		<h3 class="user-tile-name">[[name]]</h3>
-		<p hidden="[[grade]]" class="user-tile-school">[[school]]</p>
-		<p hidden="[[!grade]]" class="user-tile-school"><span class="user-tile-grade">[[grade]]</span> <span>-</span> <span>[[school]]</span></p>
-		<div class="user-tile-items">
-			<slot></slot>
-		</div>
+
+		<d2l-tile img-url="[[background]]" style$="[[_createBackgroundStyle(backgroundColor)]]">
+			<div class="user-tile-avatar">
+				<d2l-icon icon="navigation-48:profile" hidden$="{{!_hideCustomIcon(icon)}}" class="user-tile-default-icon"></d2l-icon>
+				<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" class="user-tile-avatar-image"/>
+			</div>
+			<h3 class="user-tile-name">[[name]]</h3>
+			<p hidden="[[grade]]" class="user-tile-school">[[school]]</p>
+			<p hidden="[[!grade]]" class="user-tile-school"><span class="user-tile-grade">[[grade]]</span> <span>-</span> <span>[[school]]</span></p>
+			<div class="user-tile-items">
+				<slot></slot>
+			</div>
+		</d2l-tile>
 	</template>
 	<script>
 	'use strict';
@@ -110,7 +93,7 @@
 			return !icon;
 		},
 		_createBackgroundStyle: function(backgroundColor) {
-			return backgroundColor ? 'background-color: ' + backgroundColor  + ';' : '';
+			return backgroundColor ? '--tile-image-background: ' + backgroundColor  + ';' : '';
 		}
 	});
 	</script>
