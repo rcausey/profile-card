@@ -93,7 +93,8 @@
 			return !icon;
 		},
 		_createBackgroundStyle: function(backgroundColor) {
-			return backgroundColor ? '--tile-image-background: ' + backgroundColor  + ';' : '';
+			this.customStyle['--tile-image-background'] = backgroundColor || '';
+			this.updateStyles();
 		}
 	});
 	</script>
