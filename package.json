@@ -1,6 +1,6 @@
 {
   "name": "user-tile",
-  "description": "Brightspace Profile Card",
+  "description": "Brightspace User Tile",
   "private": true,
   "scripts": {
     "test": "npm run test:lint:js",
@@ -16,8 +16,8 @@
   },
   "keywords": [
     "d2l",
-    "profile",
-    "card"
+    "user",
+    "tile"
   ],
   "author": "D2L Corporation",
   "license": "Apache-2.0",
