@@ -47,6 +47,7 @@
 				margin: 0 auto;
 				margin-top: 40px;
 				background-color: white;
+				overflow: hidden;
 			}
 
 			.user-tile-items {
@@ -63,16 +64,22 @@
 				--d2l-icon-height: 100%;
 				--d2l-icon-width: 100%;
 			}
+
 			.user-tile-grade {
 				font-weight: bold;
 			}
+
+			.user-tile-avatar-image {
+				width: 100%;
+				height: 100%;
+			}
 		</style>
 		<div class="user-tile-background-container">
-			<img src$="[[background]]" alt="" role="presentation" class="user-tile-background" />
+			<img src$="[[background]]" alt="" role="presentation" style$="[[_createBackgroundStyle(backgroundColor)]]" class="user-tile-background"/>
 		</div>
 		<div class="user-tile-avatar">
-			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" />
 			<d2l-icon icon="navigation-48:profile" hidden$="{{!_hideCustomIcon(icon)}}" class="user-tile-default-icon"></d2l-icon>
+			<img src$="[[icon]]" hidden$="{{_hideCustomIcon(icon)}}" alt="" role="presentation" class="user-tile-avatar-image"/>
 		</div>
 		<h3 class="user-tile-name">[[name]]</h3>
 		<p hidden="[[grade]]" class="user-tile-school">[[school]]</p>
@@ -87,17 +94,23 @@
 	Polymer({
 		is: 'd2l-user-tile',
 		properties: {
+			name: String,
+			school: String,
+			background: String,
+			backgroundColor: String,
+			grade: { type: String, value: null },
 			icon: {
 				type: String,
 				value: null
 			},
 			name: String,
-			school: String,
-			background: String,
-			grade: { type: String, value: null },
+			school: String
 		},
 		_hideCustomIcon: function(icon) {
 			return !icon;
+		},
+		_createBackgroundStyle: function(backgroundColor) {
+			return backgroundColor ? 'background-color: ' + backgroundColor  + ';' : '';
 		}
 	});
 	</script>
