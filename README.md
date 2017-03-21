@@ -1,9 +1,9 @@
-Profile-card
+User-tile
 =========
 
-[![Build Status](https://travis-ci.org/Brightspace/profile-card.svg?branch=master)](https://travis-ci.org/Brightspace/profile-card)
+[![Build Status](https://travis-ci.org/Brightspace/user-tile.svg?branch=master)](https://travis-ci.org/Brightspace/user-tile)
 
-# Profile-card
+# User-tile
 
 A [Polymer](https://www.polymer-project.org/1.0/)-based web component for displaying a profile's information
 

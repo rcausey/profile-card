@@ -1,7 +1,7 @@
 {
-  "name": "d2l-profile-card",
+  "name": "d2l-user-tile",
   "version": "0.0.1",
-  "homepage": "https://github.com/Brightspace/profile-card",
+  "homepage": "https://github.com/Brightspace/user-tile",
   "authors": [
     "Brightspace"
   ],
