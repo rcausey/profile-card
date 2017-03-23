@@ -8,13 +8,15 @@
 <dom-module id="d2l-user-tile-auto">
 	<template>
 		<style>
+			:host {
+				display: inline-block;
+				height: auto;
+			}
+
 			d2l-user-tile {
 				width: 100%;
 				min-height: 100%;
-			}
-
-			:host {
-				display: inline-block;
+				height: inherit;
 			}
 		</style>
 
