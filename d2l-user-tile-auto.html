@@ -7,6 +7,20 @@
 
 <dom-module id="d2l-user-tile-auto">
 	<template>
+		<style>
+			:host {
+				display: inline-block;
+				height: auto;
+			}
+
+			d2l-user-tile {
+				width: 100%;
+				min-height: 100%;
+				height: inherit;
+				margin: 0;
+			}
+		</style>
+
 		<iron-ajax id="enrollmentsRequest" url="[[_enrollmentsUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onEnrollmentsResponse"></iron-ajax>
 		<iron-ajax id="institutionRequest" url="[[_institutionUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onInstitutionResponse"></iron-ajax>
 		<iron-ajax id="organizationImageRequest" url="[[_organizationImageUrl]]" headers="[[_headers]]" on-iron-ajax-response="_onOrganizationImageResponse"></iron-ajax>
