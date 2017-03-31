@@ -2,7 +2,6 @@
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
 <link rel="import" href="../d2l-hm-constants-behavior/d2l-hm-constants-behavior.html">
-<link rel="import" href="../d2l-siren-parser/d2l-siren-parser.html">
 <link rel="import" href="d2l-user-tile.html">
 
 <dom-module id="d2l-user-tile-auto">
@@ -39,6 +38,7 @@
 			<slot></slot>
 		</d2l-user-tile>
 	</template>
+	<script src="https://s.brightspace.com/lib/siren-parser/6.0.0/siren-parser.js"></script>
 	<script>
 	'use strict';
 	Polymer({
@@ -92,8 +92,7 @@
 		},
 		_onUserResponse: function(response) {
 			if (response.detail.status === 200) {
-				this._parser = this._parser || document.createElement('d2l-siren-parser');
-				var userResponse = this._parser.parse(response.detail.xhr.response);
+				var userResponse = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
 				this._name = (userResponse.getSubEntityByRel(this.HypermediaRels.displayName) || { properties: {} }).properties.name;
 				var profile = userResponse.getSubEntityByRel(this.HypermediaRels.userProfile);
 				if (profile) {
@@ -119,7 +118,7 @@
 		},
 		_onRootResponse: function(response) {
 			if (response.detail.status === 200) {
-				var rootResponse = this._parser.parse(response.detail.xhr.response);
+				var rootResponse = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
 				this._institutionUrl = (rootResponse.getLinkByRel(this.HypermediaRels.organization) || {}).href;
 
 				if (this._institutionUrl) {
@@ -129,7 +128,7 @@
 		},
 		_onEnrollmentsResponse: function(response) {
 			if (response.detail.status === 200) {
-				var enrollmentsResponse = this._parser.parse(response.detail.xhr.response);
+				var enrollmentsResponse = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
 				if (enrollmentsResponse.entities.length === 1) {
 					this._organizationsUrl = enrollmentsResponse.getSubEntityByRel(this.HypermediaRels.userEnrollment)
 						.getLinkByRel(this.HypermediaRels.organization).href;
@@ -140,8 +139,8 @@
 		},
 		_onInstitutionResponse: function(response) {
 			if (response.detail.status === 200) {
-				var institutionResponse = this._parser.parse(response.detail.xhr.response);
-				this._themeUrl = (institutionResponse.getLinkByRel("https://themes.api.brightspace.com/rels/theme") || {}).href;
+				var institutionResponse = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
+				this._themeUrl = (institutionResponse.getLinkByRel('https://themes.api.brightspace.com/rels/theme') || {}).href;
 				if (institutionResponse.properties) {
 					this._school = institutionResponse.properties.name;
 				}
@@ -153,7 +152,7 @@
 		},
 		_onOrganizationsResponse: function(response) {
 			if (response.detail.status === 200) {
-				var organizationsResponse = this._parser.parse(response.detail.xhr.response);
+				var organizationsResponse = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
 				var imageLink = organizationsResponse.getSubEntityByClass( this.HypermediaClasses.courseImage.courseImage);
 
 				if (imageLink) {
@@ -164,7 +163,7 @@
 		},
 		_onOrganizationImageResponse: function(response) {
 			if (response.detail.status === 200) {
-				var organizationImageResponse = this._parser.parse(response.detail.xhr.response);
+				var organizationImageResponse = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
 				var backgroundImages = this._getImageLinks(organizationImageResponse, this.HypermediaClasses.courseImage.wide);
 				this._backgroundUrl = backgroundImages.highMin || backgroundImages.lowMax;
 			}
@@ -172,7 +171,7 @@
 
 		_onThemeResponse: function(response) {
 			if (response.detail.status === 200) {
-				var theme = this._parser.parse(response.detail.xhr.response);
+				var theme = window.D2L.Hypermedia.Siren.Parse(response.detail.xhr.response);
 
 				if (theme.properties) {
 					this._backgroundColor = theme.properties.BackgroundColor;
