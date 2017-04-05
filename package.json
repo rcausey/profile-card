@@ -3,6 +3,7 @@
   "description": "Brightspace User Tile",
   "private": true,
   "scripts": {
+    "postinstall": "bower install",
     "test": "npm run test:lint:js",
     "test:lint:js": "eslint --ext .js,.html ."
   },
