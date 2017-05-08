@@ -60,10 +60,10 @@
 			window.D2L.UserProfileBehavior
 		],
 		ready: function() {
-			this.generateUserRequest(this.userUrl, this.token);
+			this.generateUserRequest(this.userUrl, this.token, { background: true });
 		},
 		_onUserChange: function() {
-			this.generateUserRequest(this.userUrl, this.token);
+			this.generateUserRequest(this.userUrl, this.token, { background: true });
 		}
 	});
 	</script>
