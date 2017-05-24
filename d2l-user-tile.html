@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-colors/d2l-colors.html">
 <link rel="import" href="../d2l-icons/d2l-icons.html">
 <link rel="import" href="../d2l-tile/d2l-tile.html">
 <link rel="import" href="../d2l-image/d2l-image.html">
@@ -19,10 +20,10 @@
 			.user-tile-avatar {
 				width: 80px;
 				height: 80px;
-				border: 2px white solid;
+				border: 2px var(--d2l-color-white) solid;
 				border-radius: 14px;
 				margin: -40px auto 19px auto;
-				background-color: white;
+				background-color: var(--d2l-color-white);
 				overflow: hidden;
 			}
 
@@ -30,10 +31,6 @@
 				padding-left: 20px;
 				padding-right: 20px;
 				text-align: left;
-			}
-
-			[hidden] {
-				display: none;
 			}
 
 			.user-tile-default-icon {
@@ -47,6 +44,8 @@
 
 			.user-tile-information-wrapper {
 				@apply --d2l-body-compact-text;
+				display: flex;
+				flex-direction: column;
 			}
 
 			.user-tile-name {
@@ -56,17 +55,13 @@
 			}
 
 			.user-tile-school {
-				margin-top: 4px;
+				margin: 4px auto auto auto;
 				font-size: 0.7rem;
 			}
 
-			.user-tile-school:not([hidden]) {
-				display: flex;
-				justify-content: center;
-			}
-
-			.grade-divider {
-				margin: 0 4px;
+			.text-placeholder {
+				background-color: var(--d2l-color-titanius);
+				width: 150px;
 			}
 
 			d2l-tile {
@@ -75,26 +70,32 @@
 				width: 100%;
 				margin: 0;
 			}
+
+			[hidden] {
+				display: none;
+			}
 		</style>
 
 		<d2l-tile img-url="[[background]]" style$="[[_createBackgroundStyle(backgroundColor)]]">
 			<div class="user-tile-avatar">
-				<template is="dom-if" if="{{_hideCustomIcon(icon)}}">
+				<template is="dom-if" if="[[!_hideIconPlaceholder(icon)]]">
 					<d2l-icon icon="navigation-48:profile" class="user-tile-default-icon"></d2l-icon>
 				</template>
-				<template is="dom-if" if="{{!_hideCustomIcon(icon)}}">
-					<d2l-image
-						image-url="[[icon]]"
-						token="[[token]]"
-					></d2l-image>
+				<template is="dom-if" if="[[_hideIconPlaceholder(icon)]]">
+					<d2l-image image-url="[[icon]]" token="[[token]]"></d2l-image>
 				</template>
 			</div>
 			<div class="user-tile-information-wrapper">
-				<p class="user-tile-name">[[name]]</p>
-				<p hidden="[[grade]]" class="user-tile-school">[[school]]</p>
-				<p hidden="[[!grade]]" class="user-tile-school">
-					<span class="user-tile-grade">[[grade]]</span> <span class="grade-divider">-</span> <span>[[school]]</span>
+				<p class="user-tile-name" hidden$="[[!_hideNamePlaceholder(placeholders, name)]]">[[name]]</p>
+				<p class="user-tile-name text-placeholder" hidden$="[[_hideNamePlaceholder(placeholders, name)]]">&nbsp;</p>
+
+				<p class="user-tile-school" hidden$="[[!_hideSchoolPlaceholder(placeholders, school, grade)]]">
+					<span class="user-tile-grade" hidden$="[[!grade]]">[[grade]]</span>
+					<span hidden$="[[!grade]]">-</span>
+					<span>[[school]]</span>
 				</p>
+				<p class="user-tile-school text-placeholder" hidden$="[[_hideSchoolPlaceholder(placeholders, school, grade)]]">&nbsp;</p>
+
 				<div class="user-tile-items">
 					<slot></slot>
 				</div>
@@ -107,12 +108,25 @@
 	Polymer({
 		is: 'd2l-user-tile',
 		properties: {
-			name: String,
-			school: String,
 			background: String,
 			backgroundColor: String,
-			grade: { type: String, value: null },
+			grade: {
+				type: String,
+				value: null
+			},
 			icon: {
+				type: String,
+				value: null
+			},
+			name: {
+				type: String,
+				value: null
+			},
+			placeholders: {
+				type: Boolean,
+				value: false
+			},
+			school: {
 				type: String,
 				value: null
 			},
@@ -121,16 +135,28 @@
 				value: null
 			}
 		},
+
 		listeners: {
 			'd2l-image-failed-to-load': '_onImageLoadFailure'
 		},
-		_hideCustomIcon: function(icon) {
-			return !icon;
+
+		_hideIconPlaceholder: function(icon) {
+			return !!icon;
 		},
+
+		_hideNamePlaceholder: function(placeholders, name) {
+			return !placeholders || 'string' === typeof name;
+		},
+
+		_hideSchoolPlaceholder: function(placeholders, school, grade) {
+			return !placeholders || 'string' === typeof school || 'string' === typeof grade;
+		},
+
 		_createBackgroundStyle: function(backgroundColor) {
 			this.customStyle['--tile-image-background'] = backgroundColor || '';
 			this.updateStyles();
 		},
+
 		_onImageLoadFailure: function() {
 			this.icon = null;
 		}
