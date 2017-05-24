@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="d2l-user-tile.html">
+<link rel="import" href="../d2l-hm-constants-behavior/d2l-hm-constants-behavior.html">
+<link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
 <link rel="import" href="../d2l-user-profile-behavior/d2l-user-profile-behavior.html">
+<link rel="import" href="d2l-user-tile.html">
 
 <dom-module id="d2l-user-tile-auto">
 	<template>
@@ -37,19 +39,11 @@
 		properties: {
 			token: String,
 			userUrl: String,
-			_authorization: String,
 			_backgroundColor: String,
 			_backgroundUrl: String,
-			_enrollmentsUrl: String,
-			_headers: String,
 			_iconUrl: String,
-			_institutionUrl: String,
 			_name: String,
-			_organizationImageUrl: String,
-			_organizationsUrl: String,
-			_previousUserCall: Object,
-			_school: String,
-			_themeUrl: String
+			_school: String
 		},
 		observers: [
 			'_onUserChange( userUrl, token )'
