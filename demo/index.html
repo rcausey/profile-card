@@ -1,30 +1,70 @@
 <head>
 	<script src="https://s.brightspace.com/lib/webcomponentsjs/0.7.21/webcomponents.min.js"></script>
 	<link rel="import" href="../../d2l-demo-template/d2l-demo-template.html">
-    <link rel="import" href="../d2l-user-tile.html">
-    <link rel="import" href="d2l-user-tile-demo-container.html">
+	<link rel="import" href="../d2l-user-tile.html">
+	<style>
+		.d2l-demo-fixture {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+		.d2l-demo-fixture > d2l-user-tile {
+			min-width: 400px;
+			height: 250px;
+			margin: 10px 10px;
+		}
+	</style>
 </head>
 <body>
 	<d2l-demo-template title="d2l-user-tile">
 		<div class="d2l-demo-fixture">
-            <d2l-user-tile-demo-container>
-                <d2l-user-tile
-                    name="John Doe"
-                    school="Some School">
-                </d2l-user-tile>
-                <d2l-user-tile
-                    name="Abe Lincoln"
-                    school="Clone High"
-                    icon="abe.jpg">
-                </d2l-user-tile>
-                <d2l-user-tile
-                    name="Joan of Arc"
-                    school="Clone High"
-                    grade="Grade 12"
-                    icon="joan.jpg"
-                    background-color="#0000FF">
-                </d2l-user-tile>
-            </d2l-user-tile-demo-container>
+			<d2l-user-tile id="slow-tile"></d2l-user-tile>
+			<d2l-user-tile id="placeholder-tile" placeholders></d2l-user-tile>
+			<d2l-user-tile
+				name="Abe Lincoln"
+				school="Clone High"
+				icon="abe.jpg">
+			</d2l-user-tile>
+			<d2l-user-tile
+				name="Joan of Arc"
+				school="Clone High"
+				grade="Grade 12"
+				icon="joan.jpg"
+				background-color="#0000FF">
+			</d2l-user-tile>
 		</div>
 	</d2l-demo-template>
+
+	<script>
+		'use strict';
+
+		var slowTile = document.getElementById('slow-tile');
+		var placeholderTile = document.getElementById('placeholder-tile');
+
+		setTimeout(function() {
+			slowTile.icon = 'abe.jpg';
+			placeholderTile.icon = 'joan.jpg';
+		}, 1000);
+
+		setTimeout(function() {
+			slowTile.name = 'Slowly-Loading Name';
+			placeholderTile.name = 'Slow Placeholdered Name';
+		}, 2000);
+
+		setTimeout(function() {
+			slowTile.school = 'Dr. Xavier\'s School for Slowly-Loading Children (As seen on TV)';
+			placeholderTile.school = 'Dr. Xavier\'s School for Placeholder Children (As seen on TV)';
+		}, 3000);
+
+		setTimeout(function() {
+			slowTile.grade = 'Grade 50';
+			placeholderTile.grade = 'Grade 51';
+		}, 4000);
+
+		setTimeout(function() {
+			slowTile.background = 'abe.jpg';
+			placeholderTile.background = 'joan.jpg';
+		}, 5000);
+	</script>
 </body>

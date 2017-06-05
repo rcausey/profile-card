@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="d2l-user-tile.html">
+<link rel="import" href="../d2l-hm-constants-behavior/d2l-hm-constants-behavior.html">
+<link rel="import" href="../d2l-organization-hm-behavior/d2l-organization-hm-behavior.html">
 <link rel="import" href="../d2l-user-profile-behavior/d2l-user-profile-behavior.html">
+<link rel="import" href="d2l-user-tile.html">
 
 <dom-module id="d2l-user-tile-auto">
 	<template>
@@ -19,12 +21,13 @@
 		</style>
 
 		<d2l-user-tile
-			name=[[_name]]
-			school=[[_school]]
-			icon=[[_iconUrl]]
-			background=[[_backgroundUrl]]
-			background-color=[[_backgroundColor]]
-			token=[[token]]
+			name="[[_name]]"
+			school="[[_school]]"
+			icon="[[_iconUrl]]"
+			background="[[_backgroundUrl]]"
+			background-color="[[_backgroundColor]]"
+			token="[[token]]"
+			placeholders="[[placeholders]]"
 		>
 			<slot></slot>
 		</d2l-user-tile>
@@ -35,35 +38,35 @@
 	Polymer({
 		is: 'd2l-user-tile-auto',
 		properties: {
-			token: String,
-			userUrl: String,
-			_authorization: String,
-			_backgroundColor: String,
-			_backgroundUrl: String,
-			_enrollmentsUrl: String,
-			_headers: String,
-			_iconUrl: String,
-			_institutionUrl: String,
-			_name: String,
-			_organizationImageUrl: String,
-			_organizationsUrl: String,
-			_previousUserCall: Object,
-			_school: String,
-			_themeUrl: String
+			token: {
+				type: String,
+				value: null
+			},
+			userUrl: {
+				type: String,
+				value: null
+			},
+			placeholders: Boolean
 		},
+
 		observers: [
 			'_onUserChange( userUrl, token )'
 		],
+
 		behaviors: [
 			window.D2L.Hypermedia.OrganizationHMBehavior,
 			window.D2L.Hypermedia.HMConstantsBehavior,
 			window.D2L.UserProfileBehavior
 		],
+
 		ready: function() {
-			this.generateUserRequest(this.userUrl, this.token, { background: true });
+			this._onUserChange(this.userUrl, this.token);
 		},
-		_onUserChange: function() {
-			this.generateUserRequest(this.userUrl, this.token, { background: true });
+
+		_onUserChange: function(userUrl, token) {
+			if (userUrl && token) {
+				this.generateUserRequest(userUrl, token, { background: true });
+			}
 		}
 	});
 	</script>
