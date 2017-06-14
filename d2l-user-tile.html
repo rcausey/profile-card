@@ -66,21 +66,30 @@
 			[hidden] {
 				display: none;
 			}
+
+			@keyframes fade-out-then-in {
+				0% { opacity: 1; }
+				50% { opacity: 0; }
+				100% { opacity: 1; }
+			}
+
+			:host([prev-placeholders]:not([placeholders])) {
+				animation: fade-out-then-in 0.33s forwards;
+			}
 		</style>
 
-		<d2l-tile img-url="[[background]]" style$="[[_createBackgroundStyle(backgroundColor)]]" hover-effect="low-lift">
+		<d2l-tile img-url="[[_getImgUrl(background, _placeholders)]]" style$="[[_createBackgroundStyle(backgroundColor, _placeholders)]]" hover-effect="low-lift">
 			<div class="user-tile-avatar">
-				<template is="dom-if" if="[[!_hideIconPlaceholder(icon)]]">
+				<template is="dom-if" if="[[!_hideIconPlaceholder(icon, _placeholders)]]">
 					<d2l-icon icon="navigation-48:profile" class="user-tile-default-icon"></d2l-icon>
 				</template>
-				<template is="dom-if" if="[[_hideIconPlaceholder(icon)]]">
+				<template is="dom-if" if="[[_hideIconPlaceholder(icon, _placeholders)]]">
 					<d2l-image image-url="[[icon]]" token="[[token]]"></d2l-image>
 				</template>
 			</div>
 			<div class="user-tile-information-wrapper">
-				<p class="user-tile-name" hidden$="[[!_hideNamePlaceholder(placeholders, name)]]">[[name]]</p>
-				<p class="user-tile-name text-placeholder" hidden$="[[_hideNamePlaceholder(placeholders, name)]]">&nbsp;</p>
-
+				<p class="user-tile-name" hidden$="[[!_hideNamePlaceholder(_placeholders, name)]]">[[name]]</p>
+				<p class="user-tile-name text-placeholder" hidden$="[[_hideNamePlaceholder(_placeholders, name)]]">&nbsp;</p>
 				<div class="user-tile-items">
 					<slot></slot>
 				</div>
@@ -105,11 +114,17 @@
 			},
 			placeholders: {
 				type: Boolean,
-				value: false
+				value: false,
+				reflectToAttribute: 'true',
+				observer: '_updatePlaceholders'
 			},
 			token: {
 				type: String,
 				value: null
+			},
+			_placeholders: {
+				type: Boolean,
+				value: false
 			}
 		},
 
@@ -117,21 +132,35 @@
 			'd2l-image-failed-to-load': '_onImageLoadFailure'
 		},
 
-		_hideIconPlaceholder: function(icon) {
-			return !!icon;
+		_updatePlaceholders: function(placeholders, oldVal) {
+			if (oldVal || placeholders) {
+				this.setAttribute('prev-placeholders', true);
+			}
+
+			setTimeout(function() {
+				this._placeholders = placeholders;
+			}.bind(this), 160);
+		},
+
+		_hideIconPlaceholder: function(icon, placeholders) {
+			return !placeholders && !!icon;
 		},
 
 		_hideNamePlaceholder: function(placeholders, name) {
-			return !placeholders || 'string' === typeof name;
+			return !placeholders && 'string' === typeof name;
 		},
 
-		_createBackgroundStyle: function(backgroundColor) {
-			this.customStyle['--tile-image-background'] = backgroundColor || '';
+		_createBackgroundStyle: function(backgroundColor, placeholders) {
+			this.customStyle['--tile-image-background'] = (placeholders) ? '' : backgroundColor || '';
 			this.updateStyles();
 		},
 
 		_onImageLoadFailure: function() {
 			this.icon = null;
+		},
+
+		_getImgUrl: function(background, placeholders) {
+			return placeholders ? null : background;
 		}
 	});
 	</script>
