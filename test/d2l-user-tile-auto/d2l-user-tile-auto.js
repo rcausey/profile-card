@@ -57,6 +57,8 @@ describe('<d2l-user-tile-auto>', function() {
 		});
 
 		it('sets the properties on the internal <d2l-user-tile> appropriately', function(done) {
+			var innerTile = component.$$('d2l-user-tile');
+			sandbox.stub(innerTile, '_onImageLoadFailure', function() {});
 			sandbox.stub(component, 'generateUserRequest', function() {
 				component._name = 'name';
 				component._iconUrl = 'iconUrl';
@@ -67,7 +69,6 @@ describe('<d2l-user-tile-auto>', function() {
 			component.token = token;
 			component.userUrl = userUrl;
 			setTimeout(function() {
-				var innerTile = component.$$('d2l-user-tile');
 				expect(innerTile.name).to.equal('name');
 				expect(innerTile.icon).to.equal('iconUrl');
 				expect(innerTile.background).to.equal('backgroundUrl');
@@ -77,11 +78,14 @@ describe('<d2l-user-tile-auto>', function() {
 		});
 	});
 
-	describe('content placeholders', function() {
+	describe('content placeholders', function(done) {
 		it('should set the placeholder property on the internal <d2l-user-tile>', function() {
 			component = fixture('with-placeholders');
 			var internalTile = component.$$('d2l-user-tile');
-			expect(internalTile.placeholders).to.be.true;
+			setTimeout(function() {
+				expect(internalTile.placeholders).to.be.true;
+				done();
+			}, 200);
 		});
 	});
 });

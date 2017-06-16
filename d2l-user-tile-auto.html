@@ -26,7 +26,7 @@
 			background="[[_backgroundUrl]]"
 			background-color="[[_backgroundColor]]"
 			token="[[token]]"
-			placeholders="[[placeholders]]"
+			placeholders="[[!_doneRequests]]"
 		>
 			<slot></slot>
 		</d2l-user-tile>
@@ -45,7 +45,7 @@
 				type: String,
 				value: null
 			},
-			placeholders: Boolean
+			_doneRequests: Boolean
 		},
 
 		observers: [
