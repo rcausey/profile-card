@@ -30,10 +30,6 @@
 			.user-tile-items {
 				padding-left: 20px;
 				padding-right: 20px;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-				height:156px;
 				text-align: left;
 			}
 
@@ -92,7 +88,7 @@
 				</template>
 			</div>
 			<div class="user-tile-information-wrapper">
-				<h3 class="user-tile-name" hidden$="[[!_hideNamePlaceholder(_placeholders, name)]]">[[name]]</p>
+				<h3 class="user-tile-name" hidden$="[[!_hideNamePlaceholder(_placeholders, name)]]">[[name]]</h3>
 				<p class="user-tile-name text-placeholder" hidden$="[[_hideNamePlaceholder(_placeholders, name)]]">&nbsp;</p>
 				<div class="user-tile-items">
 					<slot></slot>
